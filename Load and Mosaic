@@ -1,1 +1,11 @@
-LOAD COPERNICUS GLO-30 DEM AND MOSAIC OVER THE STUDY AREA
+var demCollection = ee.ImageCollection('COPERNICUS/DEM/GLO30')
+                      .filterBounds(studyArea)
+                      .select('DEM');
+ 
+var demMosaic = demCollection.mosaic().clip(studyArea);
+var demMasked = demMosaic.updateMask(demMosaic.gt(-1000)); // drop nodata fill values
+ 
+var demVis = {min: 300, max: 6500, palette: [
+  '0000ff', '00ffff', 'ffff00', 'ff8000', 'ff0000', 'ffffff'
+]};
+Map.addLayer(demMasked, demVis, 'Copernicus GLO-30 DEM');
