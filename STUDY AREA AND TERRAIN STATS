@@ -1,1 +1,29 @@
 STUDY AREA / TERRAIN STATISTICS (printed to Console)
+var elevStats = demMasked.reduceRegion({
+  reducer: ee.Reducer.minMax().combine(ee.Reducer.mean(), '', true)
+                              .combine(ee.Reducer.stdDev(), '', true),
+  geometry: studyArea,
+  scale: 30,
+  maxPixels: 1e10,
+  bestEffort: true
+});
+print('Elevation stats (m):', elevStats);
+ 
+var slopeStats = slope.reduceRegion({
+  reducer: ee.Reducer.mean().combine(ee.Reducer.minMax(), '', true),
+  geometry: studyArea,
+  scale: 30,
+  maxPixels: 1e10,
+  bestEffort: true
+});
+print('Slope stats (deg):', slopeStats);
+ 
+print('Study Area (sq. km):', studyArea.area().divide(1e6));
+print('Study Area Perimeter (km):', studyArea.perimeter().divide(1e3));
+ 
+// Per-district area breakdown (useful for the thesis Study Area chapter)
+var districtAreas = districts.map(function (f) {
+  return f.set('area_sqkm', f.geometry().area().divide(1e6));
+});
+print('Per-district area (sq.km):',
+  districtAreas.reduceColumns(ee.Reducer.toList(2), ['ADM2_NAME', 'area_sqkm']));
