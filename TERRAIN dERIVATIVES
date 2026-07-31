@@ -1,1 +1,7 @@
-TERRAIN DERIVATIVES (slope, aspect, hillshade) — quick preview
+var slope = ee.Terrain.slope(demMasked);
+var aspect = ee.Terrain.aspect(demMasked);
+var hillshade = ee.Terrain.hillshade(demMasked);
+ 
+Map.addLayer(hillshade, {}, 'Hillshade', false);
+Map.addLayer(slope, {min: 0, max: 60, palette: ['green', 'yellow', 'red']}, 'Slope (deg)', false);
+Map.addLayer(aspect, {min: 0, max: 360, palette: ['red','yellow','green','cyan','blue','magenta','red']}, 'Aspect (deg)', false);
