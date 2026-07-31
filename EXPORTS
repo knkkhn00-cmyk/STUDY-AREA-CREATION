@@ -1,1 +1,55 @@
  EXPORTS
+// 5a. DEM as GeoTIFF -> Google Drive
+Export.image.toDrive({
+  image: demMasked,
+  description: 'Sutlej_StudyArea_DEM_GLO30_30m',
+  folder: 'PhD_Sutlej_DigitalTwin',
+  fileNamePrefix: 'Sutlej_StudyArea_DEM_GLO30',
+  region: studyArea,
+  scale: 30,
+  crs: 'EPSG:32643',   // UTM Zone 43N — correct for Shimla/Kinnaur/Bilaspur/Mandi
+  maxPixels: 1e10,
+  fileFormat: 'GeoTIFF'
+});
+ 
+// 5b. Slope and Aspect as GeoTIFFs (handy to have pre-computed too)
+Export.image.toDrive({
+  image: slope,
+  description: 'Sutlej_StudyArea_Slope',
+  folder: 'PhD_Sutlej_DigitalTwin',
+  fileNamePrefix: 'Sutlej_StudyArea_Slope',
+  region: studyArea,
+  scale: 30,
+  crs: 'EPSG:32643',
+  maxPixels: 1e10,
+  fileFormat: 'GeoTIFF'
+});
+ 
+Export.image.toDrive({
+  image: aspect,
+  description: 'Sutlej_StudyArea_Aspect',
+  folder: 'PhD_Sutlej_DigitalTwin',
+  fileNamePrefix: 'Sutlej_StudyArea_Aspect',
+  region: studyArea,
+  scale: 30,
+  crs: 'EPSG:32643',
+  maxPixels: 1e10,
+  fileFormat: 'GeoTIFF'
+});
+ 
+// 5c. Study area boundary (dissolved) as Shapefile — this becomes your
+//     "Sutlej_Basin_Boundary.shp" for any downstream Jupyter analysis
+Export.table.toDrive({
+  collection: studyAreaFC,
+  description: 'Sutlej_StudyArea_Boundary_Dissolved',
+  folder: 'PhD_Sutlej_DigitalTwin',
+  fileFormat: 'SHP'
+});
+ 
+// 5d. Individual district boundaries too, in case you need them separately
+Export.table.toDrive({
+  collection: districts,
+  description: 'Sutlej_StudyArea_Districts_Individual',
+  folder: 'PhD_Sutlej_DigitalTwin',
+  fileFormat: 'SHP'
+});
